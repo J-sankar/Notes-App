@@ -14,7 +14,7 @@ const createAccessToken = (user) => {
 }
 
 const createRefreshToken = (user) => {
-    return jwt.sign({ userID: user._id,role:user.role,username:user.name }, process.env.REFRESH_SECRET, { expiresIn: '7d' })
+    return jwt.sign({ userID: user._id, role: user.role, username: user.name }, process.env.REFRESH_SECRET, { expiresIn: '7d' })
 }
 
 export const registerNewUser = async (req, res) => {
@@ -78,6 +78,11 @@ export const login = async (req, res) => {
 
 
 
+        if (isUser.refreshTokens.length >= 3) {
+
+            isUser.refreshTokens.shift()
+
+        }
         const accessToken = createAccessToken(isUser)
         const refreshToken = createRefreshToken(isUser)
         isUser.refreshTokens.push(refreshToken)
@@ -104,17 +109,39 @@ export const login = async (req, res) => {
 
 }
 
+export const logout = async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) return res.status(203).json("No refresh token to clear")
+    try {
+        const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET)
+        const user = await User.findById(decoded.userID)
+        if (!user) return res.status(404).json("Not found")
+        user.refreshTokens = user.refreshTokens.filter(token => token !== refreshToken)
+        await user.save()
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict'
+        })
+        res.status(200).json({ message: "logout successfulf" })
+    } catch (err) {
+        console.log("ERROR:", err.message);
+        return res.sendStatus(500)
+
+    }
+}
 
 export const refresh = async (req, res) => {
     try {
         const user = req.user
         const newAccessToken = createAccessToken(user)
-             console.log("newaccess token created for user:", user.userID);
-             return res.status(200).json({ accessToken: newAccessToken })
-        
+        console.log("newaccess token created for user:", user.userID);
+        return res.status(200).json({ accessToken: newAccessToken })
+
     } catch (err) {
-        console.log("ERROR during token refresh: ",err.message);
-        return res.status(500).json({message:"Internal server error"})
-        
+        console.log("ERROR during token refresh: ", err.message);
+        return res.status(500).json({ message: "Internal server error" })
+
     }
 }
