@@ -1,7 +1,16 @@
 # Notes Sharing App 📝
 
-A full-stack app with focus on backend architecture using Node.js, Express, MongoDB, and JWT.  
+A full-stack app created primarily to improve backend development skills, while also learning how the frontend handles request/response cycles and routing with backend calls using React. 
+
+> **Note:** The Home page design and Navbar styling were created with the help of GitHub Copilot and ChatGPT.
+
 It supports secure authentication and personal note sharing.
+
+## 🚦 Current Status
+
+- ✅ **Backend:** Secure authentication, session management (3 concurrent logins), full CRUD for notes, note sharing at creation, and 'shared with me' feature are implemented and working well.
+- 🔄 **Backend (Planned):** Sharing existing notes after creation, friend/contact system, and advanced sharing options are planned for the next version.
+- 🚧 **Frontend:** Currently in the React learning phase. The Home page was designed with the help of AI and features a modern, visually appealing layout. Navigation, image slider, and sign-up section are implemented. Continuing to learn and apply React concepts such as useState, useEffect, and React Router.
 
 ---
 
@@ -18,7 +27,7 @@ It supports secure authentication and personal note sharing.
 ## Tech Stack
 
 - Backend: Node.js, Express, MongoDB, Mongoose, JWT
-- Frontend (Planned): React + Vite
+- Frontend: React + Vite
 - Auth: Bcrypt + Access/Refresh token flow
 
 ---
@@ -57,7 +66,6 @@ JWT_SECRET=your_secret
 
 ---
 
-
 📁 Project Structure
 
 .
@@ -81,11 +89,19 @@ JWT_SECRET=your_secret
 │   ├── package-lock.json
 │   └── node_modules/
 ├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── ...
+│   ├── public/
+│   ├── package.json
+│   └── ...
 └── README.md
-
 
 
 ## Status
 
-- ✅ Backend in progress
-- 🔄 Basic React frontend planned
+- ✅ Backend stable and feature-rich
+- 🚧 React frontend in active development (learning phase)
+- 🏠 Home page designed with AI assistance for modern look and usability

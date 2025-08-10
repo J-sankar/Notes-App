@@ -24,11 +24,9 @@ app.use(cors({
 }));
 
 
+
 app.use('/api/auth',authrouter)
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
 app.use('/dashboard', dashboardRouter)
 
 

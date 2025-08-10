@@ -1,0 +1,81 @@
+/* Home.css - Modern, clean styles for Home page */
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+  font-family: 'Poppins', sans-serif;
+}
+
+.section1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px auto;
+  padding: 40px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(102, 126, 234, 0.08);
+  max-width: 1100px;
+  width: 90%;
+  gap: 32px;
+}
+
+.imageslider {
+  flex: 1;
+  padding: 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signup {
+  flex: 1;
+  padding: 32px;
+  background: #f8f9ff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.10);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.signup .welcome h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
+  color: #3d5a80;
+  text-shadow: 0 1px 4px rgba(102, 126, 234, 0.08);
+}
+
+
+
+.tosignup {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 36px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.10);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  margin-top: 20px;
+  letter-spacing: 0.5px;
+}
+
+
+
+.tosignup:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  color: #fff;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.18);
+}
