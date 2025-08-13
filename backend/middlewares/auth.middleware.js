@@ -67,15 +67,15 @@ export const verifyAdmin = async (req, res, next) => {
         const dbUser = await User.findById(user.userID)
         if (!dbUser) {
             console.log("User not found");
-            return res.status(403).json({message:"User not found"})
+            return res.status(404).json({message:"User not found"})
         }
         if (dbUser.role !== 'admin'){
             console.log("User Unathourized");
-            return res.status(402).json({message:"Restricted"})
+            return res.status(403).json({message:"Restricted"})
         }
-        const updatedUser = dbUser
-        req.user = updatedUser
-        console.log("Authorized admin ");
+        
+        req.user = dbUser
+        console.log("Authorized admin "); 
         
         next()
     } catch (err) {

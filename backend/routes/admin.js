@@ -1,12 +1,9 @@
-import { verifyAdmin,verifyAccessToken } from "../middlewares/auth.middleware.js";
 import express from "express";
+import { verifyAdmin,verifyAccessToken } from "../middlewares/auth.middleware.js";
+import { displayItems } from "../controllers/adminControllers.js";
 
  const adminRouter = express.Router()
 adminRouter.use(verifyAccessToken,verifyAdmin)
 
-adminRouter.get('/dashboard',(req,res)=>{
-    console.log("Admin dashboard connected")
-    return res.status(200).json("Welcome Admin")
-    
-})
+adminRouter.get('/dashboard',displayItems)
 export default adminRouter
