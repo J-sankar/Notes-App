@@ -19,13 +19,12 @@ export const verifyAccessToken = async (req, res, next) => {
             return res.status(401).json({ message: "invalid token" })
         }
         const decoded = jwt.verify(token, process.env.ACCESS_SECRET)
-        console.log(decoded);
 
-        
+
         req.user = decoded
         console.log("Token verified succesfuly");
         next()
-        
+
     } catch (err) {
         console.log("ERROR: ", err);
         return res.status(403).json({ message: "Token invalid or expired" })
@@ -34,17 +33,17 @@ export const verifyAccessToken = async (req, res, next) => {
 
 }
 
-export const verifyRefreshToken = async (req,res,next)=>{
+export const verifyRefreshToken = async (req, res, next) => {
     const token = req.cookies.refreshToken
 
-    if(!token){
+    if (!token) {
         console.log("Refresh token missing:");
-        return res.status(401).json({message:"Refresh token missing"})
-    
-        
+        return res.status(401).json({ message: "Refresh token missing" })
+
+
     }
     try {
-        const decoded = jwt.verify(token , process.env.REFRESH_SECRET)
+        const decoded = jwt.verify(token, process.env.REFRESH_SECRET)
         const user = await User.findById(decoded.userID)
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -56,6 +55,31 @@ export const verifyRefreshToken = async (req,res,next)=>{
         next()
     } catch (err) {
         console.log("ERROR: ", err.message);
-        return res.status(403).json({message:"Invalid or expired refreshtoken"})
+        return res.status(403).json({ message: "Invalid or expired refreshtoken" })
+    }
+}
+
+
+export const verifyAdmin = async (req, res, next) => {
+   
+    try {
+        const user = req.user
+        const dbUser = await User.findById(user.userID)
+        if (!dbUser) {
+            console.log("User not found");
+            return res.status(403).json({message:"User not found"})
+        }
+        if (dbUser.role !== 'admin'){
+            console.log("User Unathourized");
+            return res.status(402).json({message:"Restricted"})
+        }
+        const updatedUser = dbUser
+        req.user = updatedUser
+        console.log("Authorized admin ");
+        
+        next()
+    } catch (err) {
+        console.log("ERROR: ",err.message);
+        return res.status(500).json({message:"Server Error. Please Try Again"})
     }
 }

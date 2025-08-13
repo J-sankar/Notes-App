@@ -81,10 +81,12 @@ JWT_SECRET=your_secret
 │   │   ├── notesModels.js
 │   │   └── userModels.js
 │   ├── routes
+│   │   ├── admin.js
 │   │   ├── auth.js
 │   │   └── dashboard.js
 │   ├── .env
 │   ├── app.js
+│   ├── db.js
 │   ├── package.json
 │   ├── package-lock.json
 │   └── node_modules/

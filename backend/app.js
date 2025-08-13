@@ -5,6 +5,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import authrouter from './routes/auth.js'
 import  dashboardRouter  from './routes/dashboard.js'
+import  adminRouter  from './routes/admin.js'
 import  connectDB  from './db.js'
 
 dotenv.config()
@@ -29,6 +30,7 @@ app.use('/api/auth',authrouter)
 
 app.use('/dashboard', dashboardRouter)
 
+app.use('/admin',adminRouter)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
