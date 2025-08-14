@@ -19,8 +19,8 @@ const createRefreshToken = (user) => {
 
 export const registerNewUser = async (req, res) => {
     try {
-        const { name, email, phone, password, username, role } = req.body
-        if (!name || !email || !password || !username || !role) {
+        const { name, email, phone, password, username } = req.body
+        if (!name || !email || !password || !username) {
             console.log("Data not found");
             return res.status(400).json({ Message: "Please provide all data" })
 
@@ -36,7 +36,7 @@ export const registerNewUser = async (req, res) => {
             console.log("Username already exists");
             return res.status(409).json({ Message: "username alread exists" })
         }
-        await User.create({ name, email, phone, password, username, role })
+        await User.create({ name, email, phone, password, username })
         console.log("New user registered");
 
         return res.status(200).json({ Message: "New user registered" })
@@ -136,7 +136,7 @@ export const refresh = async (req, res) => {
     try {
         const user = req.user
         const newAccessToken = createAccessToken(user)
-        console.log("newaccess token created for user:", user.userID);
+        console.log("newaccess token created for user:", user._id);
         return res.status(200).json({ accessToken: newAccessToken })
 
     } catch (err) {

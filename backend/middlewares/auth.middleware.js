@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
 import { User } from '../models/userModels.js'
-import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 
 

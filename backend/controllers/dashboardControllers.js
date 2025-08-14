@@ -17,7 +17,7 @@ export const createNote = async (req, res) => {
             title: title,
             content: content,
             owner: userID,
-            sharedWith:req.body.sharedWith
+            sharedWith: req.body.sharedWith
         }
         const createnote = new Notes(notes)
         await createnote.save()
@@ -104,29 +104,51 @@ export const deleteNote = async (req, res) => {
     }
 
 }
+export const shareNote = async (req, res) => {
+    const userID = req.user.userID
+    if (!userID) {
+        console.log("User not found")
+        return res.status(404).json({ message: "User not found" })
+    }
+        const { shareID, canEdit } = req.body
+        const shareUser = await User.findById(shareID)
+        if (!shareUser) return res.status(404).json({ message: "recipient no found" })
+    try {
+        const note = await Notes.findById(req.params.noteID)
+        if (userID !== note.owner.toString())
+            return res.status(403).json({message:"mismatch"})
+        
+        note.sharedWith.push({ user: shareID, canEdit })
+        await note.save()
+        return res.status(200).json({ message: "shared with the user" })
+    } catch (err) {
+        console.log("ERROR: ", err.message)
+        return res.status(500).json({ message: "Server Error, Please try again" })
+    }
 
-export const sharedWithMe = async (req,res)=>{
-    const userID = req.user.userID ;
-    if(!userID){
+}
+export const sharedWithMe = async (req, res) => {
+    const userID = req.user.userID;
+    if (!userID) {
         console.log("User not found");
-        return res.status(404).json({message:"User not found"})
+        return res.status(404).json({ message: "User not found" })
     }
     try {
         const notes = await Notes.find(
-            {"sharedWith.user": userID},
-            {title: 1, content: 1, owner: 1, _id: 0}
+            { "sharedWith.user": userID },
+            { title: 1, content: 1, owner: 1, _id: 0 }
         ).populate('owner', 'name email -_id')
-        
+
         if (notes.length === 0) {
             console.log("No notes shared with you");
-            return res.status(200).json({message:"No notes found"})
+            return res.status(200).json({ message: "No notes found" })
         }
-        
+
         console.log("Notes obtained");
         return res.status(200).json(notes)
-        
-    }catch(err){
-        console.log("ERROR : ",err.message);
-        return res.status(500).json({message:"Server error. please try again later"})
+
+    } catch (err) {
+        console.log("ERROR : ", err.message);
+        return res.status(500).json({ message: "Server error. please try again later" })
     }
 }

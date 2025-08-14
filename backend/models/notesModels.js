@@ -23,7 +23,8 @@ const notesSchema = new mongoose.Schema({
                 ref: "User"
 
             },
-            canEdit: {type:Boolean,default:false}
+            canEdit: {type:Boolean,default:false},
+            _id:false
         }
 
 
