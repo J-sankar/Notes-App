@@ -18,7 +18,9 @@ export const verifyAccessToken = async (req, res, next) => {
             return res.status(401).json({ message: "invalid token" })
         }
         const decoded = jwt.verify(token, process.env.ACCESS_SECRET)
-
+        const user = await User.findById(decoded.userID).select('_id name username role status')
+        if (user.status === "blocked")
+            return res.status(403).json({message:'User Blocked By Admin'})
 
         req.user = decoded
         console.log("Token verified succesfuly");
@@ -54,7 +56,7 @@ export const verifyRefreshToken = async (req, res, next) => {
         next()
     } catch (err) {
         console.log("ERROR: ", err.message);
-        return res.status(403).json({ message: "Invalid or expired refreshtoken" })
+        return res.status(401).json({ message: "Invalid or expired refreshtoken" })
     }
 }
 
@@ -63,7 +65,7 @@ export const verifyAdmin = async (req, res, next) => {
    
     try {
         const user = req.user
-        const dbUser = await User.findById(user.userID)
+        const dbUser = await User.findById(user.userID).select('_id name username role status')
         if (!dbUser) {
             console.log("User not found");
             return res.status(404).json({message:"User not found"})

@@ -2,7 +2,6 @@ import express from 'express'
 import { verifyAccessToken } from '../middlewares/auth.middleware.js'
 import { createNote,getAllNotesOfUser,editNote,deleteNote,sharedWithMe,shareNote } from '../controllers/dashboardControllers.js'
 
-import mongoose from 'mongoose'
 
 
 const dashboardRouter = express.Router()

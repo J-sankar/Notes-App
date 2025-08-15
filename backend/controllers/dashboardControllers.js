@@ -4,10 +4,14 @@ import mongoose from 'mongoose'
 
 export const createNote = async (req, res) => {
     const { title, content } = req.body
+    if (!title) {
+        return res.status(400).json({ message: "Title is required" })
+    }
+    
     const userID = req.user.userID
     const user = await User.findOne({ _id: userID })
     if (!user) {
-        console.log("USer not found");
+        console.log("User not found");
         return res.status(404).json({ message: "user not found" })
 
     }
@@ -38,7 +42,7 @@ export const getAllNotesOfUser = async (req, res) => {
         return res.status(404).json({ message: "User not found" })
     }
     try {
-        const notes = await Notes.find({ owner: userID }).populate('owner', 'name email')
+        const notes = await Notes.find({ owner: userID }).populate('owner', 'name email').lean()
         if (notes.length == 0) {
             console.log("no notes available. create a note to access");
             return res.status(200).json({ message: "No notes available from this user" })
@@ -67,6 +71,10 @@ export const editNote = async (req, res) => {
             console.log("No note found");
             return res.status(404).json({ message: "Note not found" })
         }
+        if (!title) {
+            return res.status(400).json({ message: "Provide title or content to update" })
+        }
+        
         if (note.owner.toString() !== userID) {
             console.log("Not authorized");
             return res.status(403).json({ messages: "Not authorized" })
@@ -111,10 +119,16 @@ export const shareNote = async (req, res) => {
         return res.status(404).json({ message: "User not found" })
     }
         const { shareID, canEdit } = req.body
+        if (!shareID) {
+            console.log("Recipient ID missing")
+            return res.status(400).json({ message: "Recipient ID is required" })
+        }
         const shareUser = await User.findById(shareID)
         if (!shareUser) return res.status(404).json({ message: "recipient no found" })
     try {
         const note = await Notes.findById(req.params.noteID)
+        if (!note) return res.status(404).json({ message: "Note not found" }) 
+
         if (userID !== note.owner.toString())
             return res.status(403).json({message:"mismatch"})
         
@@ -141,7 +155,7 @@ export const sharedWithMe = async (req, res) => {
 
         if (notes.length === 0) {
             console.log("No notes shared with you");
-            return res.status(200).json({ message: "No notes found" })
+            return res.status(204).json({ message: "No notes found" })
         }
 
         console.log("Notes obtained");
