@@ -136,4 +136,5 @@ frontend/
 
 - ✅ Backend stable and feature-rich
 - 🚧 React frontend in active development 
+- Added pagination , filtering by tags, searching, and sort for user notes
 
