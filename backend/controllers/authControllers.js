@@ -2,20 +2,10 @@ import { User } from '../models/userModels.js'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
+import { createAccessToken,createRefreshToken } from '../utils/tokens.js'
 
 dotenv.config()
-const createAccessToken = (user) => {
-    const payload = {
-        userID: user._id,
-        role: user.role,
-        username: user.name
-    }
-    return jwt.sign(payload, process.env.ACCESS_SECRET, { expiresIn: "15min" })
-}
 
-const createRefreshToken = (user) => {
-    return jwt.sign({ userID: user._id, role: user.role, username: user.name }, process.env.REFRESH_SECRET, { expiresIn: '7d' })
-}
 
 export const registerNewUser = async (req, res) => {
     try {
@@ -28,13 +18,13 @@ export const registerNewUser = async (req, res) => {
         const emailExists = await User.findOne({ email })
         if (emailExists) {
             console.log("Email already Exists");
-            return res.status(409).json({ Mesaage: "Email already exists" })
+            return res.status(409).json({ message: "Email already exists" })
         }
         const usernameExists = await User.findOne({ username })
         if (usernameExists) {
 
             console.log("Username already exists");
-            return res.status(409).json({ message: "username alread exists" })
+            return res.status(409).json({message: "username already exists"})
         }
         await User.create({ name, email, phone, password, username })
         console.log("New user registered");
@@ -53,7 +43,7 @@ export const registerNewUser = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body
-        console.log(req.body);
+
 
         if (!email || !password) {
             console.log("Data not found");
@@ -67,8 +57,7 @@ export const login = async (req, res) => {
 
         }
         const isMatch = await isUser.passwordValidityCheck(password)
-        console.log(isMatch);
-        console.log(isUser.password);
+      
         
         if (isUser && !isMatch) {
             console.log("Password is incorrect");
@@ -98,7 +87,7 @@ export const login = async (req, res) => {
         )
         console.log("Login successfull");
 
-        return res.status(200).json({ accessToken, message: "Login Successull" })
+        return res.status(200).json({ accessToken, message: "Login Successfull" })
 
 
     } catch (err) {

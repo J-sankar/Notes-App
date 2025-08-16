@@ -9,6 +9,10 @@ const notesSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    tags:{
+        type:[String],
+        default:[]
+    },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

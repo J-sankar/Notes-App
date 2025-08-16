@@ -2,17 +2,24 @@
 
 A full-stack app created primarily to improve backend development skills, while also learning how the frontend handles request/response cycles and routing with backend calls using React. 
 
-> **Note:** The Home page design and Navbar styling were created with the help of GitHub Copilot and ChatGPT.
-
-It supports secure authentication and personal note sharing.
+> 
 
 ## 🚦 Current Status
+🚦 Current Status
 
-- ✅ **Backend:** Secure authentication, session management (3 concurrent logins), full CRUD for notes, note sharing at creation, and 'shared with me' feature are implemented and working well.
-- 🔄 **Backend (Planned):** Sharing existing notes after creation, friend/contact system, and advanced sharing options are planned for the next version.
-- 🚧 **Frontend:** Currently in the React learning phase. The Home page was designed with the help of AI and features a modern, visually appealing layout. Navigation, image slider, and sign-up section are implemented. Continuing to learn and apply React concepts such as useState, useEffect, and React Router.
+✅ Backend:
+Secure authentication (JWT with Access + Refresh Tokens)
+Session management (up to 3 concurrent logins)
+Full CRUD for notes
+Note sharing at creation
+‘Shared with me’ feature implemented
 
----
+
+
+🚧 Frontend:
+React in learning phase
+Home page, navigation, image slider, and sign-up implemented
+Working with useState, useEffect, React Router
 
 ## Features
 
@@ -34,24 +41,46 @@ It supports secure authentication and personal note sharing.
 
 ## API Routes
 
-### Auth
+### api/auth 
 ```
-POST   /api/auth/register
-POST   /api/auth/login
-POST   /api/auth/refresh
-POST   /api/auth/logout (pending)
+| Method | Endpoint    | Middleware           | Description                                              |
+| ------ | ----------- | -------------------- | -------------------------------------------------------- |
+| `POST` | `/register` | —                    | Register a new user.                                     |
+| `POST` | `/login`    | —                    | Authenticate a user and return access & refresh tokens.  |
+| `POST` | `/refresh`  | `verifyRefreshToken` | Generate a new access token using a valid refresh token. |
+| `POST` | `/logout`   | `verifyRefreshToken` | Logout the user and invalidate the refresh token.        |
+
 ```
 
-### Notes (Protected)
+### dashboard (Protected)
 ```
-GET    /dashboard/my-notes
-POST   /dashboard/my-notes/create
-PUT    /dashboard/my-notes/:noteID
-DELETE /dashboard/my-notes/:noteID
-GET    /dashboard/my-notes/shared-with-me
+| Method   | Endpoint                   | Description                                                  |
+| -------- | -------------------------- | ------------------------------------------------------------ |
+| `POST`   | `/my-notes/create`         | Create a new note for the authenticated user.                |
+| `GET`    | `/my-notes`                | Retrieve all notes of the authenticated user.                |
+| `PUT`    | `/my-notes/:noteID`        | Edit/update a specific note by its ID.                       |
+| `DELETE` | `/my-notes/:noteID`        | Delete a specific note by its ID.                            |
+| `GET`    | `/my-notes/shared-with-me` | Get notes that have been shared with the authenticated user. |
+| `PATCH`  | `/my-notes/:noteID/share`  | Share a specific note with another user.                     |
+
+```
+### admin (protected)
 ```
 
----
+| Method   | Endpoint                | Description                               |
+| -------- | ----------------------- | ----------------------------------------- |
+| `GET`    | `/dashboard`            | Display dashboard items.                  |
+| `GET`    | `/notes`                | Retrieve all notes in the system.         |
+| `DELETE` | `/notes/:noteID/delete` | Delete a specific note by ID.             |
+| `GET`    | `/users`                | Retrieve all users.                       |
+| `PUT`    | `/users/:id/role`       | Update a user's role.                     |
+| `PUT`    | `/users/:id/status`     | Update a user's status (active/inactive). |
+| `DELETE` | `/users/:id/delete`     | Delete a user by ID.                      |
+
+
+--- 
+
+
 
 ## Setup
 
@@ -68,42 +97,43 @@ JWT_SECRET=your_secret
 
 📁 Project Structure
 
-.
-├── backend
-│   ├── config
-│   │   └── db.js
-│   ├── controllers
-│   │   ├── authControllers.js
-│   │   └── dashboardControllers.js
-│   ├── middlewares
-│   │   └── auth.middleware.js
-│   ├── models
-│   │   ├── notesModels.js
-│   │   └── userModels.js
-│   ├── routes
-│   │   ├── admin.js
-│   │   ├── auth.js
-│   │   └── dashboard.js
-│   ├── .env
-│   ├── app.js
-│   ├── db.js
-│   ├── package.json
-│   ├── package-lock.json
-│   └── node_modules/
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── ...
-│   ├── public/
-│   ├── package.json
-│   └── ...
-└── README.md
+backend/
+├── config/
+│   └── db.js
+├── controllers/
+│   ├── adminControllers.js
+│   ├── authControllers.js
+│   └── dashboardControllers.js
+├── middlewares/
+│   ├── auth.middleware.js
+│   └── errorHandler.js
+├── models/
+│   ├── notesModels.js
+│   └── userModels.js
+├── routes/
+│   ├── admin.js
+│   ├── auth.js
+│   └── dashboard.js
+├── utils/
+│   └── tokens.js
+├── .env
+├── app.js
+├── db.js
+├── server.js
+├── package.json
+├── package-lock.json
+└── node_modules/
 
+frontend/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   └── services/
+├── public/
+└── package.json
 
 ## Status
 
 - ✅ Backend stable and feature-rich
-- 🚧 React frontend in active development (learning phase)
-- 🏠 Home page designed with AI assistance for modern look and usability
+- 🚧 React frontend in active development 
+

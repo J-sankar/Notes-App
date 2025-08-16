@@ -49,6 +49,8 @@ export const verifyRefreshToken = async (req, res, next) => {
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
+        if (user.status === "blocked")
+            return res.status(403).json({message:'User Blocked By Admin'})
         if (!user.refreshTokens.includes(token)) {
             return res.status(403).json({ message: "Refresh token not recognized" });
         }
